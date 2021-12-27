@@ -5,4 +5,4 @@ import com.ferraz.flashcard.domain.entities.CardEntity
 import com.ferraz.flashcard.domain.entities.CollectionEntity
 
 @Dao
-abstract class CardDao : GenericDataSource<CardEntity>(CardEntity::class.simpleName)
+abstract class CardDao : GenericDataSource<CardEntity>()

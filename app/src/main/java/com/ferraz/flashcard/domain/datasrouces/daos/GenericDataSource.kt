@@ -7,8 +7,11 @@ import androidx.room.Update
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.ferraz.flashcard.domain.entities.GenericEntity
+import java.lang.reflect.ParameterizedType
 
-abstract class GenericDataSource<T : GenericEntity>(private val table: String?) {
+abstract class GenericDataSource<T : GenericEntity> {
+
+    private val table = ((javaClass.superclass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<*>).simpleName
 
     @Insert
     abstract suspend fun save(model: T): Long
@@ -22,10 +25,10 @@ abstract class GenericDataSource<T : GenericEntity>(private val table: String?) 
     @RawQuery
     protected abstract suspend fun findAll(query: SupportSQLiteQuery): List<T>
 
-    suspend fun findAll() = findAll(SimpleSQLiteQuery("SELECT * FROM $table"))
-
     @RawQuery
     protected abstract suspend fun findByID(query: SupportSQLiteQuery): T
+
+    suspend fun findAll() = findAll(SimpleSQLiteQuery("SELECT * FROM $table"))
 
     suspend fun findByID(uuid: Long) = findByID(SimpleSQLiteQuery("SELECT * FROM $table WHERE uuid = $uuid"))
 }

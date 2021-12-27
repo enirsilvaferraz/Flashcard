@@ -1,9 +1,9 @@
 package com.ferraz.flashcard.domain.usecases
 
-import com.ferraz.flashcard.domain.entities.CardEntity
+import com.ferraz.flashcard.domain.entities.GenericEntity
 import com.ferraz.flashcard.domain.repositories.GenericRepository
 
-class CardGetAllUseCase(private val repository: GenericRepository<CardEntity>) {
+class GenericFindAllUseCase<T : GenericEntity>(private val repository: GenericRepository<T>) {
 
     suspend fun execute() = repository.findAll()
 }

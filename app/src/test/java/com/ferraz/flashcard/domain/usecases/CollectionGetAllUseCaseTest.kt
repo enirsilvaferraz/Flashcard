@@ -12,7 +12,7 @@ import java.lang.Exception
 class CollectionGetAllUseCaseTest {
 
     private val repository: GenericRepository<CollectionEntity> = mockk()
-    private val usecase = CollectionGetAllUseCase(repository = repository)
+    private val usecase = GenericFindAllUseCase(repository = repository)
 
     @Test
     fun `DADO que tenho colecoes salvas QUANDO consulto as colecoes ENTAO devera retornar todas as colecoes`() = runBlocking {

@@ -5,7 +5,9 @@ import com.ferraz.flashcard.domain.datasrouces.daos.GenericDataSource
 import com.ferraz.flashcard.domain.entities.CardEntity
 import com.ferraz.flashcard.domain.repositories.GenericRepository
 import com.ferraz.flashcard.domain.repositories.GenericRepositoryImpl
-import com.ferraz.flashcard.domain.usecases.CardGetAllUseCase
+import com.ferraz.flashcard.domain.usecases.CardSaveUseCase
+import com.ferraz.flashcard.domain.usecases.GenericFindAllUseCase
+import com.ferraz.flashcard.domain.usecases.GenericFindByIDUseCase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -25,6 +27,8 @@ object DomainKoinModule {
 
     val useCases = module {
 
-        factory { CardGetAllUseCase(repository = get()) }
+        factory { GenericFindAllUseCase<CardEntity>(repository = get()) }
+        factory { GenericFindByIDUseCase<CardEntity>(repository = get()) }
+        factory { CardSaveUseCase(repository = get()) }
     }
 }

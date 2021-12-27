@@ -1,8 +1,10 @@
 package com.ferraz.flashcard.domain.datasrouces.daos
 
 import android.database.sqlite.SQLiteConstraintException
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.room.Room
 import com.ferraz.flashcard.domain.entities.CollectionEntity
+import com.ferraz.flashcard.ui.AppApplicationTest
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -11,8 +13,9 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
+@ExperimentalFoundationApi
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [28])
+@Config(sdk = [28], application = AppApplicationTest::class)
 class CollectionDaoTest {
 
     private lateinit var dao: CollectionDao
