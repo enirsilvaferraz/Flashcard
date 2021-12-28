@@ -1,5 +1,6 @@
 package com.ferraz.flashcard.domain.datasrouces.daos
 
+import androidx.lifecycle.LiveData
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.RawQuery
@@ -22,13 +23,17 @@ abstract class GenericDataSource<T : GenericEntity> {
     @Delete
     abstract suspend fun delete(model: T)
 
-    @RawQuery
-    protected abstract suspend fun findAll(query: SupportSQLiteQuery): List<T>
+    //@RawQuery
+    //protected abstract suspend fun findAll(query: SupportSQLiteQuery): List<T>
 
     @RawQuery
-    protected abstract suspend fun findByID(query: SupportSQLiteQuery): T
+    protected abstract suspend fun findByID2(query: SupportSQLiteQuery): T
 
-    suspend fun findAll() = findAll(SimpleSQLiteQuery("SELECT * FROM $table"))
+    //suspend fun findAll() = findAll(SimpleSQLiteQuery("SELECT * FROM $table"))
 
-    suspend fun findByID(uuid: Long) = findByID(SimpleSQLiteQuery("SELECT * FROM $table WHERE uuid = $uuid"))
+    suspend fun findByID2(uuid: Long?) = findByID2(SimpleSQLiteQuery("SELECT * FROM $table WHERE uuid = $uuid"))
+
+    abstract fun findAll(): LiveData<List<T>>
+
+    abstract fun findByID(uuid: Long?): LiveData<T>
 }

@@ -1,6 +1,7 @@
 package com.ferraz.flashcard.ui.cards
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,7 +14,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -22,10 +25,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ferraz.flashcard.domain.entities.CardEntity
+import com.ferraz.flashcard.ui.AppNavigation.navigateToCardDetail
 import com.ferraz.flashcard.ui.GenericView.fab
 import com.ferraz.flashcard.ui.GenericView.topBar
 import com.ferraz.flashcard.ui.cards.CardListView.Companion.Screen
-import com.ferraz.flashcard.ui.collections.AppNavigation.navigateToCardDetail
+import com.ferraz.flashcard.ui.cards.CardListViewModel.Failure
+import com.ferraz.flashcard.ui.cards.CardListViewModel.Success
 import com.ferraz.flashcard.ui.theme.FlashcardTheme
 import com.ferraz.flashcard.ui.theme.StatusBar
 
@@ -34,7 +39,10 @@ class CardListView(private val viewModel: CardListViewModel) {
 
     @Composable
     fun Managed(navController: NavHostController) {
-        Screen(viewModel.all, navController)
+        when (val state = viewModel.cards.observeAsState().value) {
+            is Success -> Screen(state.models, navController)
+            is Failure -> Toast.makeText(LocalContext.current, state.e.message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {

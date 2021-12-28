@@ -9,8 +9,8 @@ class CollectionSaveUseCase(private val repository: GenericRepository<Collection
 
     data class Params(val model: CollectionEntity)
 
-    suspend fun execute(params: Params): CollectionEntity {
+    suspend fun execute(params: Params) {
         if (params.model.name.isBlank()) throw NameNotFiledException()
-        return repository.save(params.model)
+        repository.save(params.model)
     }
 }

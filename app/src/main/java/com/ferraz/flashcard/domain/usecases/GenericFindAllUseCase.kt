@@ -5,5 +5,5 @@ import com.ferraz.flashcard.domain.repositories.GenericRepository
 
 class GenericFindAllUseCase<T : GenericEntity>(private val repository: GenericRepository<T>) {
 
-    suspend fun execute() = repository.findAll()
+    fun execute() = repository.findAll()
 }

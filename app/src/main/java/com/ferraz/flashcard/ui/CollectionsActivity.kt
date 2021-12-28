@@ -1,4 +1,4 @@
-package com.ferraz.flashcard.ui.collections
+package com.ferraz.flashcard.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,9 +14,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.navigation.navigation
+import com.ferraz.flashcard.ui.AppNavigation.CARD_LIST_ROUT
 import com.ferraz.flashcard.ui.cards.CardDetailView
 import com.ferraz.flashcard.ui.cards.CardListView
+import com.ferraz.flashcard.ui.collections.CollectionDetailView
+import com.ferraz.flashcard.ui.collections.CollectionsView
+import com.ferraz.flashcard.ui.collections.elements
 import org.koin.android.ext.android.inject
 
 @ExperimentalComposeUiApi
@@ -45,10 +48,9 @@ class CollectionsActivity : ComponentActivity() {
     @Composable
     fun Setup(navController: NavHostController) {
 
-        NavHost(navController = navController, startDestination = "home") {
+        NavHost(navController = navController, startDestination = CARD_LIST_ROUT) {
 
-            navigation(route = "home", startDestination = "card-list") {
-
+            /*
                 composable(route = "collection-list") {
                     collectionsView.Screen(collections) { collection ->
                         navController.navigate("collection-detail/${collection?.uuid ?: 0}")
@@ -61,17 +63,18 @@ class CollectionsActivity : ComponentActivity() {
                     }
                 }
 
-                composable(route = "card-list") {
-                    cardListView.Managed(navController = navController)
-                }
+             */
 
-                composable(route = "card-detail/{uuid}", arguments = listOf(navArgument("uuid") { type = NavType.LongType })) {
-                    cardDetailView.Managed(navController = navController, uuid = it.arguments?.getLong("uuid"))
-                }
+            composable(route = CARD_LIST_ROUT) {
+                cardListView.Managed(navController = navController)
+            }
 
-                composable(route = "card-detail") {
-                    cardDetailView.Managed(navController = navController, uuid = null)
-                }
+            composable(route = "card-detail/{uuid}", arguments = listOf(navArgument("uuid") { type = NavType.LongType })) {
+                cardDetailView.Managed(navController = navController, uuid = it.arguments?.getLong("uuid"))
+            }
+
+            composable(route = "card-detail") {
+                cardDetailView.Managed(navController = navController, uuid = null)
             }
         }
     }
@@ -79,7 +82,10 @@ class CollectionsActivity : ComponentActivity() {
 }
 
 object AppNavigation {
-    fun NavHostController.navigateToCardList() = navigate("card-list")
+
+    const val CARD_LIST_ROUT = "card-list"
+
+    fun NavHostController.navigateToCardList() = navigate(CARD_LIST_ROUT)
     fun NavHostController.navigateToCardDetail(uuid: Long?) = navigate(if (uuid != null) "card-detail/$uuid" else "card-detail")
 }
 

@@ -1,21 +1,27 @@
 package com.ferraz.flashcard.ui.cards
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ferraz.flashcard.domain.entities.CardEntity
 import com.ferraz.flashcard.domain.usecases.GenericFindAllUseCase
 import kotlinx.coroutines.launch
 
-class CardListViewModel(private val findAllUseCase: GenericFindAllUseCase<CardEntity>?) : ViewModel() {
+class CardListViewModel(private val findAllUseCase: GenericFindAllUseCase<CardEntity>) : ViewModel() {
 
-    var all by mutableStateOf(listOf<CardEntity>())
+    sealed interface State
+    class Failure(val e: Exception) : State
+    class Success(val models: List<CardEntity>) : State
 
-    init {
+    val cards = MediatorLiveData<State>().apply {
         viewModelScope.launch {
-            all = findAllUseCase?.execute() ?: emptyList()
+            try {
+                addSource(findAllUseCase.execute()) {
+                    postValue(Success(it ?: emptyList()))
+                }
+            } catch (e: Exception) {
+                postValue(Failure(e))
+            }
         }
     }
 }
